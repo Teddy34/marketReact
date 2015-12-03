@@ -52,7 +52,9 @@ class ItemTab extends React.Component {
 	render() {
 		let filteredArray;
 		if (this.state.value) {
-			filteredArray = _.filter(this.props.data, (elem) => {return elem.typeName.toLowerCase().indexOf(this.state.value) !== -1});
+			filteredArray = _.filter(this.props.data, (elem) => {
+				return _.every(this.state.value.toLowerCase().split(' '), (sequence) => (elem.typeName.toLowerCase().indexOf(sequence) !== -1));
+				});
 		}
 		else {
 			filteredArray = this.props.data
