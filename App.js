@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 const sample = [
 	{
@@ -23,23 +24,6 @@ const sample = [
 const iconURL ='https://image.eveonline.com/Type/';
 const iconURLSuffix = "_32.png";
 
-class InputFilter extends React.Component {
-
-	constructor() {
-  super();
-  this.state = {value: ""};
-  this.handleChange = this.handleChange.bind(this);
- }
-
-  handleChange (event) {
-    this.setState({value: event.target.value});
-  }
-
-	render() {
-		return <input type="text" value={this.state.value} onChange={this.handleChange}/>
-	}
-};
-
 class Item extends React.Component {
 	render() {
 		return (<tr>
@@ -54,8 +38,27 @@ class Item extends React.Component {
 }
 
 class ItemTab extends React.Component {
+
+	constructor() {
+		super();
+		this.state = {value: ""};
+		this.handleChange = this.handleChange.bind(this);
+	}
+
+  handleChange (event) {
+    this.setState({value: event.target.value});
+  }
+
 	render() {
-		return (<table>
+		let filteredArray;
+		if (this.state.value) {
+			filteredArray = _.filter(this.props.data, (elem) => {return elem.typeName.toLowerCase().indexOf(this.state.value) !== -1});
+		}
+		else {
+			filteredArray = this.props.data
+		}
+		return (<div><input type="text" value={this.state.value} onChange={this.handleChange}/>
+					<table>
 					<tbody>
 					<tr>
 								<td></td>
@@ -65,16 +68,17 @@ class ItemTab extends React.Component {
 								<td>Prix Dodixie</td>
 								<td>Prix Dodixie +15%</td>
 					</tr>
-					{this.props.data.map( (data) => {console.log(data);return <Item key={data.typeId} elem={data}/>})}
+					{filteredArray.map( (data) => {return <Item key={data.typeId} elem={data}/>})}
 					</tbody>
-				</table>);
+				</table>
+				</div>);
 	}
 }
 
 class App extends React.Component {
 
 	render() {
-		return (<div><InputFilter /><ItemTab data={this.props.data.data} /></div>)
+		return <ItemTab data={this.props.data.data} />
 	}
 
 }
