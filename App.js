@@ -25,7 +25,7 @@ const iconURLSuffix = "_32.png";
 
 class Item extends React.Component {
 	render() {
-		return (<tr key={this.props.elem.typeId}>
+		return (<tr>
 								<td><img src={iconURL + this.props.elem.typeId +iconURLSuffix} /></td>
 								<td>{this.props.elem.typeName}</td>
 								<td>{this.props.elem.quantity}</td>
@@ -40,7 +40,7 @@ class ItemTab extends React.Component {
 	render() {
 		return (<table>
 					<tbody>
-					{this.props.data.map( (data) => {return <Item />}}
+					{this.props.data.map( (data) => {console.log(data);return <Item key={data.typeId} elem={data}/>})}
 					</tbody>
 				</table>);
 	}
