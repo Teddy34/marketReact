@@ -23,6 +23,23 @@ const sample = [
 const iconURL ='https://image.eveonline.com/Type/';
 const iconURLSuffix = "_32.png";
 
+class InputFilter extends React.Component {
+
+	constructor() {
+  super();
+  this.state = {value: ""};
+  this.handleChange = this.handleChange.bind(this);
+ }
+
+  handleChange (event) {
+    this.setState({value: event.target.value});
+  }
+
+	render() {
+		return <input type="text" value={this.state.value} onChange={this.handleChange}/>
+	}
+};
+
 class Item extends React.Component {
 	render() {
 		return (<tr>
@@ -40,6 +57,14 @@ class ItemTab extends React.Component {
 	render() {
 		return (<table>
 					<tbody>
+					<tr>
+								<td></td>
+								<td>Nom</td>
+								<td>Perdu</td>
+								<td>Disponible</td>
+								<td>Prix Dodixie</td>
+								<td>Prix Dodixie +15%</td>
+					</tr>
 					{this.props.data.map( (data) => {console.log(data);return <Item key={data.typeId} elem={data}/>})}
 					</tbody>
 				</table>);
@@ -49,7 +74,7 @@ class ItemTab extends React.Component {
 class App extends React.Component {
 
 	render() {
-		return <ItemTab data={this.props.data.data} />;
+		return (<div><InputFilter /><ItemTab data={this.props.data.data} /></div>)
 	}
 
 }
