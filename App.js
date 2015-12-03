@@ -21,6 +21,15 @@ const sample = [
 	}
 ];
 
+const propertyArray = [
+	["name","typeName"],
+	["lost","quantity"],
+	["available","volumeAvailable"],
+	["dodixiePrice","minSell"],
+	["narecommandedPriceme","reasonablePrice"],
+];
+const propertyMap = new Map(propertyArray);
+
 const iconURL ='https://image.eveonline.com/Type/';
 const iconURLSuffix = "_32.png";
 
@@ -41,15 +50,70 @@ class ItemTab extends React.Component {
 
 	constructor() {
 		super();
-		this.state = {value: ""};
+		this.state = {value: "", orderType:["type","desc"]};
 		this.handleChange = this.handleChange.bind(this);
+		this._updateState = this._updateState.bind(this);
+		this.handleClickIcon = this.handleClickIcon.bind(this);
+		this.handleClickName = this.handleClickName.bind(this);
+		this.handleClickLost = this.handleClickLost.bind(this);
+		this.handleClickAvailable = this.handleClickAvailable.bind(this);
+		this.handleClickDodixiePrice = this.handleClickDodixiePrice.bind(this);
+		this.handleClickRecommandedPrice = this.handleClickRecommandedPrice.bind(this);
+		this._sortElemList = this._sortElemList.bind(this);
 	}
 
   handleChange (event) {
     this.setState({value: event.target.value});
   }
 
+	_updateState(type) {
+		var bAscending = (this.state.orderType[0] === type) ? this.state.orderType.indexOf("asc") === -1 : false;
+		this.setState({orderType: [type, bAscending?"asc":"desc"]});
+	}
+
+  handleClickIcon () {
+ 		this._updateState("type");
+  }
+
+  handleClickName () {
+  	this._updateState("name");
+  }
+
+  handleClickLost () {
+    this._updateState("lost");
+  }
+
+  handleClickAvailable () {
+    this._updateState("available");
+  }
+
+  handleClickDodixiePrice () {
+    this._updateState("dodixiePrice");
+  }
+
+  handleClickRecommandedPrice () {
+    this._updateState("recommandedPrice");
+  }
+
+  _sortElemList(elemList) {
+  	const bIsAsc = this.state.orderType.indexOf("asc") === -1;
+  	const orderType = this.state.orderType[0];
+  	let newList;
+
+  	if (orderType === "type") {
+  		newList = elemList.slice();
+  	} else {
+  		newList = _.sortByOrder(elemList, [propertyMap.get(orderType),this.state.orderType[1]]);
+  	}
+
+  	if (!bIsAsc) {
+  		newList = newList.reverse();
+  	}
+  	return newList;
+  }
+
 	render() {
+		console.log(this.state.orderType);
 		let filteredArray;
 		if (this.state.value) {
 			filteredArray = _.filter(this.props.data, (elem) => {
@@ -57,20 +121,23 @@ class ItemTab extends React.Component {
 				});
 		}
 		else {
-			filteredArray = this.props.data
+			filteredArray = this.props.data;
 		}
+
+		let sortedArray = this._sortElemList(filteredArray);
+
 		return (<div><input type="text" value={this.state.value} onChange={this.handleChange}/>
 					<table>
 					<tbody>
 					<tr>
-								<td></td>
-								<td>Nom</td>
-								<td>Perdu</td>
-								<td>Disponible</td>
-								<td>Prix Dodixie</td>
-								<td>Prix Dodixie +15%</td>
+								<td onClick={this.handleClickIcon}>Icone</td>
+								<td onClick={this.handleClickName}>Nom</td>
+								<td onClick={this.handleClickLost}>Perdus</td>
+								<td onClick={this.handleClickAvailable}>Disponibles</td>
+								<td onClick={this.handleClickDodixiePrice}>Prix Dodixie</td>
+								<td onClick={this.handleClickRecommandedPrice}>Prix Dodixie +15%</td>
 					</tr>
-					{filteredArray.map( (data) => {return <Item key={data.typeId} elem={data}/>})}
+					{sortedArray.map( (data) => {return <Item key={data.typeId} elem={data}/>})}
 					</tbody>
 				</table>
 				</div>);
