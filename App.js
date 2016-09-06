@@ -1,6 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import moment from 'moment';
 
 const sample = [
 	{
@@ -35,7 +34,7 @@ const iconURL ='https://image.eveonline.com/Type/';
 const iconURLSuffix = "_32.png";
 
 function formatDate(timestamp) {
-    return moment(timestamp).format('YYYY:MM:DD HH:mm:ss')
+    return (new Date(timestamp)).toUTCString();
 }
 
 class Item extends React.Component {
@@ -131,7 +130,8 @@ class ItemTab extends React.Component {
 
 		let sortedArray = this._sortElemList(filteredArray);
 
-		return (<div><input type="text" value={this.state.value} onChange={this.handleChange}/>
+		return (<div>
+                    Filter: <input type="text" value={this.state.value} onChange={this.handleChange}/>
 					<table>
 					<tbody>
 					<tr>
@@ -154,7 +154,13 @@ class App extends React.Component {
 	render() {
 		return (
             <div>
+                <div>DOG-HQ Market data for Brave Collective</div>
+                <br/>
+                <div>Based on rolling 7 days losses and filtering excessive prices.</div>
+                <div>Courtesy of Tethys Luxor. Donations appreciated.</div>
+                <br/>
                 <div>Latest update: {formatDate(this.props.data.timestamp)}</div>
+                <br/>
                 <ItemTab data={this.props.data.data} />
             </div>
             )
