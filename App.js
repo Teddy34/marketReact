@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import moment from 'moment';
 
 const sample = [
 	{
@@ -32,6 +33,10 @@ const propertyMap = new Map(propertyArray);
 
 const iconURL ='https://image.eveonline.com/Type/';
 const iconURLSuffix = "_32.png";
+
+function formatDate(timestamp) {
+    return moment(timestamp).format('YYYY:MM:DD HH:mm:ss')
+}
 
 class Item extends React.Component {
 	render() {
@@ -130,12 +135,12 @@ class ItemTab extends React.Component {
 					<table>
 					<tbody>
 					<tr>
-								<td onClick={this.handleClickIcon}>Icone</td>
-								<td onClick={this.handleClickName}>Nom</td>
-								<td onClick={this.handleClickLost}>Perdus</td>
-								<td onClick={this.handleClickAvailable}>Disponibles</td>
-								<td onClick={this.handleClickDodixiePrice}>Prix Dodixie</td>
-								<td onClick={this.handleClickRecommandedPrice}>Prix Dodixie +15%</td>
+								<td onClick={this.handleClickIcon}>Icon</td>
+								<td onClick={this.handleClickName}>Name</td>
+								<td onClick={this.handleClickLost}>Lost</td>
+								<td onClick={this.handleClickAvailable}>Available</td>
+								<td onClick={this.handleClickDodixiePrice}>Market price</td>
+								<td onClick={this.handleClickRecommandedPrice}>Recommanded price</td>
 					</tr>
 					{sortedArray.map( (data) => {return <Item key={data.typeId} elem={data}/>})}
 					</tbody>
@@ -147,7 +152,12 @@ class ItemTab extends React.Component {
 class App extends React.Component {
 
 	render() {
-		return <ItemTab data={this.props.data.data} />
+		return (
+            <div>
+                <div>Latest update: {formatDate(this.props.data.timestamp)}</div>
+                <ItemTab data={this.props.data.data} />
+            </div>
+            )
 	}
 
 }

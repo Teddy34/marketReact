@@ -9,7 +9,7 @@ module.exports = {
     port:3333,
     proxy: {
       '/backend': {
-        target: 'http://localhost:8080/api/',
+        target: 'http://primamarket.herokuapp.com/api',
         secure: false
       }
     }
