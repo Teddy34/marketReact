@@ -16,6 +16,7 @@ const sample = [
 		"typeId":638,
 		"volumeAvailable":0,
 		"reasonablePrice":226545398.62,
+		"yeld":0.12,
 		"_id":"56592448e5dd5d1100c97dfe",
 		"hubData":{"mean":196995998.8}
 	}
@@ -25,8 +26,11 @@ const propertyArray = [
 	["name","typeName"],
 	["lost","quantity"],
 	["available","volumeAvailable"],
-	["dodixiePrice","minSell"],
-	["narecommandedPriceme","reasonablePrice"],
+	["jitaPrice","minSell"],
+	["recommandedPrice","reasonablePrice"],
+	["minimumOrderSellPrice","minimumOrderSellPrice"],
+	["yeld","yeldForSort"],
+	["typeID","typeID"],
 ];
 const propertyMap = new Map(propertyArray);
 
@@ -46,6 +50,9 @@ class Item extends React.Component {
 								<td>{this.props.elem.volumeAvailable}</td>
 								<td>{this.props.elem.hubData.mean}</td>
 								<td>{this.props.elem.reasonablePrice}</td>
+								<td>{this.props.elem.minimumOrderSellPrice}</td>
+								<td>{this.props.elem.yeld}</td>
+								<td>{this.props.elem.typeID}</td>
 							</tr>);
 	}
 }
@@ -63,6 +70,9 @@ class ItemTab extends React.Component {
 		this.handleClickAvailable = this.handleClickAvailable.bind(this);
 		this.handleClickDodixiePrice = this.handleClickDodixiePrice.bind(this);
 		this.handleClickRecommandedPrice = this.handleClickRecommandedPrice.bind(this);
+		this.handleClickMinSellOrder = this.handleClickMinSellOrder.bind(this);
+		this.handleClickTypeId = this.handleClickTypeId.bind(this);
+		this.handleClickYeld = this.handleClickYeld.bind(this);
 		this._sortElemList = this._sortElemList.bind(this);
 	}
 
@@ -99,6 +109,18 @@ class ItemTab extends React.Component {
     this._updateState("recommandedPrice");
   }
 
+  handleClickMinSellOrder () {
+    this._updateState("minimumOrderSellPrice");
+  }
+
+  handleClickYeld () {
+    this._updateState("yeld");
+  }
+
+  handleClickTypeId () {
+    this._updateState("typeID");
+  }
+
   _sortElemList(elemList) {
   	const bIsAsc = this.state.orderType.indexOf("asc") === -1;
   	const orderType = this.state.orderType[0];
@@ -117,7 +139,6 @@ class ItemTab extends React.Component {
   }
 
 	render() {
-		console.log(this.state.orderType);
 		let filteredArray;
 		if (this.state.value) {
 			filteredArray = _.filter(this.props.data, (elem) => {
@@ -141,6 +162,9 @@ class ItemTab extends React.Component {
 								<td onClick={this.handleClickAvailable}>Available</td>
 								<td onClick={this.handleClickDodixiePrice}>Market price</td>
 								<td onClick={this.handleClickRecommandedPrice}>Recommanded price</td>
+								<td onClick={this.handleClickMinSellOrder}>Minimum local sell order</td>
+								<td onClick={this.handleClickYeld}>Yeld</td>
+								<td onClick={this.handleClickMinSellOrder}>typeId</td>
 					</tr>
 					{sortedArray.map( (data) => {return <Item key={data.typeId} elem={data}/>})}
 					</tbody>

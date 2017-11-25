@@ -19,7 +19,7 @@ module.exports = {
       test: /\.js?$/, // A regexp to test the require path. accepts either js or jsx
       loader: 'babel-loader', // The module to load. "babel" is short for "babel-loader"
       query: {
-        presets: ['es2015', 'react']
+        presets: ['es2015', 'react', 'stage-3']
       },
       exclude: /node_modules/
     }]
